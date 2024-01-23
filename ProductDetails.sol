@@ -85,9 +85,9 @@ contract ProductDetails {
     
 
     // add a product
-    function addProduct(string memory name, string memory description, uint256 manufacturedDate, string memory batchNumber) public {
+    function addProduct(string memory name, string memory description, uint256 manufacturedDate, string memory batchNumber, ProductState state, ContractCondition condition) public {
         uint256 productId = nextProductId++;
-        products[productId] = Product(productId, name, description, manufacturedDate, batchNumber);
+        products[productId] = Product(productId, name, description, manufacturedDate, batchNumber, state, condition);
         
         emit ProductAdded(productId);
     }
