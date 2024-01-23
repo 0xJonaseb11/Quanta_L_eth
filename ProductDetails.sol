@@ -46,6 +46,15 @@ contract ProductDetails {
         // other properties
     }
 
+    struct ProductHistory {
+        uint256 timestamp;
+        string action;
+        string location;
+        ProductState state;
+    }
+
+    mapping(uint256 => ProductHistory[]) private productHistories;
+
 
 
     // handle errors
@@ -80,6 +89,9 @@ contract ProductDetails {
 
   event ProductRecall(uint256 indexed productId);
 
+  event ProductMovement(uint256 productId, string location, uint256 timestamp);
+
+
 
     // more events
     
@@ -108,5 +120,19 @@ contract ProductDetails {
             revert InvalidStateTransition();
 
          }
+    }
+
+    // trace the product movement
+    function logProductMovement(uint256 productId, string memory newLocation) public  {
+        // check if the product exists and the sender is authorized
+
+        products[productId].location = newLocation;
+
+        emit ProductMovement(productId, newLocation, block.timestamp);
+    }
+
+    // get Product History
+    function getProductHistory(uint256 productId) public view returns(ProductHistory[] memory) {
+        
     }
 }
