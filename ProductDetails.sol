@@ -39,7 +39,7 @@ contract ProductDetails {
         string description;
         uint256 manufactureDate;
         string batchNumber;
-
+        
         ProductState state;
         ContractCondition condition;
 
@@ -106,7 +106,7 @@ contract ProductDetails {
 
     // retrieve  product details
     function getProductDetails(uint256 productId) public view returns(Product memory) {
-        require(products[productId].id != 0, "Product not found");
+        require(products[productId].id != 0, "Product With specified Id is not found");
 
         return products[productId];
     }
@@ -126,13 +126,13 @@ contract ProductDetails {
     function logProductMovement(uint256 productId, string memory newLocation) public  {
         // check if the product exists and the sender is authorized
 
-        products[productId].location = newLocation;
+        // products[productId].location = newLocation;
 
         emit ProductMovement(productId, newLocation, block.timestamp);
     }
 
     // get Product History
     function getProductHistory(uint256 productId) public view returns(ProductHistory[] memory) {
-        
+
     }
 }
