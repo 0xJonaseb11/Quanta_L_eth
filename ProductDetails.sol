@@ -4,8 +4,8 @@ pragma solidity ^0.8.19;
 contract ProductDetails {
 
     // state variables
-
-    uint256 private nextProductId = 1;
+    // uint256 public productId = 12345;
+    uint256 private nextProductId;
 
     mapping(uint256 => Product) private products;
 
@@ -40,8 +40,8 @@ contract ProductDetails {
         uint256 manufactureDate;
         string batchNumber;
         
-        ProductState state;
-        ContractCondition condition;
+        // ProductState state;
+        // ContractCondition condition;
 
         // other properties
     }
@@ -67,29 +67,31 @@ contract ProductDetails {
 
 
 
+
+
    
 
     // handle product events
     event ProductAdded(uint256 indexed productId);
     event ProductAccepted();
     event ProductRejected();
-    event ProductAlreadyExists();
+    event ProductAlreadyExists(uint256 productId);
     event ProductSuspicious();
     event ProductDetailsRetrieved();
     event ProductPotentiallyCounterFeit();
 
-  // Regarding supply chain
-  event ProductRegistered(uint256 indexed productId);
-  event QualityCheckUpdated();
-  event ShipmentStarted();
-  event ShipmentReceived();
-  event InventoryUpdated();
-  event ProductSold(uint256 indexed productId);
-  event ProductConsumed(uint256 indexed productId);
+   // Regarding supply chain
+    event ProductRegistered(uint256 indexed productId);
+    event QualityCheckUpdated();
+    event ShipmentStarted();
+    event ShipmentReceived();
+    event InventoryUpdated();
+    event ProductSold(uint256 indexed productId);
+    event ProductConsumed(uint256 indexed productId);
 
-  event ProductRecall(uint256 indexed productId);
+    event ProductRecall(uint256 indexed productId);
 
-  event ProductMovement(uint256 productId, string location, uint256 timestamp);
+    event ProductMovement(uint256 productId, string location, uint256 timestamp);
 
 
 
@@ -97,42 +99,60 @@ contract ProductDetails {
     
 
     // add a product
-    function addProduct(string memory name, string memory description, uint256 manufacturedDate, string memory batchNumber, ProductState state, ContractCondition condition) public {
-        uint256 productId = nextProductId++;
-        products[productId] = Product(productId, name, description, manufacturedDate, batchNumber, state, condition);
-        
-        emit ProductAdded(productId);
-    }
+    function addProduct(string memory name, string memory description, uint256 manufacturedDate, string memory batchNumber) public {
+    uint256 productId = nextProductId;
+    products[productId] = Product(productId, name, description, manufacturedDate, batchNumber);
+    nextProductId++;
+    
+    emit ProductAdded(productId);
+}
+
+    
 
     // retrieve  product details
-    function getProductDetails(uint256 productId) public view returns(Product memory) {
-        require(products[productId].id != 0, "Product With specified Id is not found");
 
-        return products[productId];
+   function getProductDetails(uint256 productId) public view returns (Product memory) {
+      Product memory product = products[productId];
+      require(product.id != 0, "Product with Specified id is not found");
+
+      return product;
     }
+   
 
-    // Handle product state
-    function updateProductState(uint256 productId, ProductState currentState) public view {
-        Product storage product = products[productId];
+//     // retrieve details step by step
 
-         // check for valid state transitions
-         if (product.state == ProductState.PRODUCT_REGISTERED && currentState != ProductState.PRODUCT_TRANSIT) {
-            revert InvalidStateTransition();
+//     function retrieveProductDetails(uint256 productId) public view {
+//     Product memory product = getProductDetails(productId);
+//     string memory productName = product.name;
+//     string memory productDescription = product.description;
 
-         }
-    }
+//     // Use the product details as needed
+//     // ...
 
-    // trace the product movement
-    function logProductMovement(uint256 productId, string memory newLocation) public  {
-        // check if the product exists and the sender is authorized
+// }
 
-        // products[productId].location = newLocation;
+//     // Handle product state
+//     function updateProductState(uint256 productId, ProductState currentState) public view {
+//         Product storage product = products[productId];
 
-        emit ProductMovement(productId, newLocation, block.timestamp);
-    }
+//          // check for valid state transitions
+//          if (product.state == ProductState.PRODUCT_REGISTERED && currentState != ProductState.PRODUCT_TRANSIT) {
+//             revert InvalidStateTransition();
 
-    // get Product History
-    function getProductHistory(uint256 productId) public view returns(ProductHistory[] memory) {
+//          }
+//     }
 
-    }
+//     // trace the product movement
+//     function logProductMovement(uint256 productId, string memory newLocation) public  {
+//         // check if the product exists and the sender is authorized
+
+//         // products[productId].location = newLocation;
+
+//         emit ProductMovement(productId, newLocation, block.timestamp);
+//     }
+
+//     // get Product History
+//     function getProductHistory(uint256 productId) public view returns(ProductHistory[] memory) {
+
+//     }
 }
