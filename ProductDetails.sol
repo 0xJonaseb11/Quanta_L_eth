@@ -100,9 +100,8 @@ contract ProductDetails {
 
     // add a product
     function addProduct(string memory name, string memory description, uint256 manufacturedDate, string memory batchNumber) public {
-    uint256 productId = nextProductId;
+    uint256 productId = nextProductId++;
     products[productId] = Product(productId, name, description, manufacturedDate, batchNumber);
-    nextProductId++;
     
     emit ProductAdded(productId);
 }
@@ -113,46 +112,46 @@ contract ProductDetails {
 
    function getProductDetails(uint256 productId) public view returns (Product memory) {
       Product memory product = products[productId];
-      require(product.id != 0, "Product with Specified id is not found");
+      require(product.id != 0, "Product with Specified ID is not found.");
 
       return product;
     }
    
 
-//     // retrieve details step by step
+    // retrieve details step by step
 
-//     function retrieveProductDetails(uint256 productId) public view {
-//     Product memory product = getProductDetails(productId);
-//     string memory productName = product.name;
-//     string memory productDescription = product.description;
+    function retrieveProductDetails(uint256 productId) public view {
+    Product memory product = getProductDetails(productId);
+    string memory productName = product.name;
+    string memory productDescription = product.description;
 
-//     // Use the product details as needed
-//     // ...
+    // Use the product details as needed
+    // ...
 
-// }
+}
 
-//     // Handle product state
-//     function updateProductState(uint256 productId, ProductState currentState) public view {
-//         Product storage product = products[productId];
+    // Handle product state
+    function updateProductState(uint256 productId, ProductState currentState) public view {
+        Product storage product = products[productId];
 
-//          // check for valid state transitions
-//          if (product.state == ProductState.PRODUCT_REGISTERED && currentState != ProductState.PRODUCT_TRANSIT) {
-//             revert InvalidStateTransition();
+         // check for valid state transitions
+         if (product.state == ProductState.PRODUCT_REGISTERED && currentState != ProductState.PRODUCT_TRANSIT) {
+            revert InvalidStateTransition();
 
-//          }
-//     }
+         }
+    }
 
-//     // trace the product movement
-//     function logProductMovement(uint256 productId, string memory newLocation) public  {
-//         // check if the product exists and the sender is authorized
+    // trace the product movement
+    function logProductMovement(uint256 productId, string memory newLocation) public  {
+        // check if the product exists and the sender is authorized
 
-//         // products[productId].location = newLocation;
+        // products[productId].location = newLocation;
 
-//         emit ProductMovement(productId, newLocation, block.timestamp);
-//     }
+        emit ProductMovement(productId, newLocation, block.timestamp);
+    }
 
-//     // get Product History
-//     function getProductHistory(uint256 productId) public view returns(ProductHistory[] memory) {
+    // get Product History
+    function getProductHistory(uint256 productId) public view returns(ProductHistory[] memory) {
 
-//     }
+    }
 }
